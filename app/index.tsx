@@ -1,58 +1,57 @@
-import { Link } from 'expo-router';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Navbar from './Navbar'
 
-export default function HomeScreen() {
+
+
+const HomeScreen = () => {
+  const navigation = useNavigation();
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Navbar/>
+      <View style={styles.overlay}>
+        <Text style={styles.title}>ManoManaba Recetas</Text>
+        <Text style={styles.subtitle}>Descubre deliciosas recetas para cada ocasión</Text>
+      </View>
 
-        <View style={styles.overlay}>
-          <Text style={styles.title}>ManoManaba Recetas</Text>
-          <Text style={styles.subtitle}>Descubre deliciosas recetas para cada ocasión</Text>
-        </View>
-
- <Text style={styles.story}>
+      <Text style={styles.story}>
         Nacido de la fortaleza de mujeres valientes, este espacio ofrece recetas que han ayudado a sanar heridas y aliviar el dolor.
         Son platillos de amor, de resistencia y de un nuevo comienzo.
+      </Text>
 
+      <View style={styles.imageContainer}>
+      <Image source={require('../assets/images/womanlaughing.jpg')} style={styles.womanLaughingImage} />
 
-</Text>
+        <Image source={require('../assets/images/oldwomanlaughing.jpg')} style={styles.womanLaughingImage} />
+      </View>
 
-<View style={styles.imageContainer}>
-  <Image source={require('@/assets/images/womanlaughing.jpg')} style={styles.womanLaughingImage} />
-  <Image source={require('@/assets/images/oldwomanlaughing.jpg')} style={styles.womanLaughingImage} />
-</View>
+      <Text style={styles.story}>
+        En muchas comunidades, las mujeres han encontrado en la cocina un refugio y una forma de cambiar su historia.
+        Cuando la noche termina con violencia, la mañana empieza con un plato que no solo cura el cuerpo, sino que también
+        brinda esperanza. Cada receta aquí es un símbolo de sanación y de la posibilidad de un futuro mejor.
+      </Text>
 
-<Text style={styles.story}>
-  En muchas comunidades, las mujeres han encontrado en la cocina un refugio y una forma de cambiar su historia. 
-  Cuando la noche termina con violencia, la mañana empieza con un plato que no solo cura el cuerpo, sino que también 
-  brinda esperanza. Cada receta aquí es un símbolo de sanación y de la posibilidad de un futuro mejor.
-</Text>
-  <TouchableOpacity style={styles.button}>
-            <Link href="/details" style={styles.buttonText}>Buscar Recetas</Link>
-          </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('details')}  // Navigate to details screen
+      >
+        <Text style={styles.buttonText}>Buscar Recetas</Text>
+      </TouchableOpacity>
 
-        <View style={styles.recipeCard}>
-        </View>
-        <View style={styles.recipeCard}>
-          <Image source={require('@/assets/images/ceviche.webp')} style={styles.recipeImage} />
-
-        </View>
-      </ScrollView>
- 
+      <View style={styles.recipeCard}>
+        <Image source={require('@/assets/images/ceviche.webp')} style={styles.recipeImage} />
+      </View>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
     backgroundColor: '#fff',
-  },
-  backgroundImage: {
-    width: '100%',
-    height: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.4)', // Semi-transparent overlay
@@ -75,8 +74,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
   },
+  story: {
+    fontSize: 16,
+    color: '#000',
+    textAlign: 'left',
+    lineHeight: 22,
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    fontWeight: 'bold',
+  },
   button: {
-    marginTop:45 ,
+    marginTop: 20,
     backgroundColor: '#e63946',
     paddingVertical: 12,
     paddingHorizontal: 25,
@@ -91,9 +100,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  recipeScroll: {
-    paddingVertical: 20,
-    paddingHorizontal: 15,
+  imageContainer: {
+    flexDirection: 'row', // Align images in a row
+    justifyContent: 'space-between', // Even spacing between images
+    alignItems: 'center', // Center them vertically
+    width: '90%', // Adjust width to avoid edge contact
+    marginVertical: 15, // Add space above and below
+  },
+  womanLaughingImage: {
+    width: 150,
+    height: 150,
+    resizeMode: 'cover',
   },
   recipeCard: {
     backgroundColor: '#fff',
@@ -106,33 +123,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
   },
-
-  recipeTitle: {
-    marginTop: 8,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  story: {
-    fontSize: 16,
-    color: '#000',
-    textAlign: 'left',
-    lineHeight: 22,
-    marginTop: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    fontWeight:'bold'
-  },  imageContainer: {
-    flexDirection: 'row',  // Align images in a row
-    justifyContent: 'space-between', // Even spacing between images
-    alignItems: 'center',  // Center them vertically
-    width: '90%',  // Adjust width to avoid edge contact
-    marginVertical: 15, // Add space above and below
-  },
-  womanLaughingImage: {
-    width: 150,
-    height: 150,
+  recipeImage: {
+    width: 200,
+    height: 200,
     resizeMode: 'cover',
   },
 });
 
+export default HomeScreen;
