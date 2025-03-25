@@ -98,3 +98,8 @@ Join our community of developers creating universal apps.
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 >>>>>>> d025ec8 (Initial commit)
+
+
+<!-- <View style={styles.recipeCard}>
+        <Image source={require('@/assets/images/ceviche.webp')} style={styles.recipeImage} />
+      </View> -->

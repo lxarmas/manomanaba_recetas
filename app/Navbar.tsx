@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.hamburgerButton}>
-        <Ionicons name={menuOpen ? 'close' : 'menu'} size={28} color="#e63946" />
+        <Ionicons name={menuOpen ? 'close' : 'menu'} size={28} color="#FF0000" />
       </TouchableOpacity>
       {menuOpen && (
         <View style={styles.menu}>
@@ -32,7 +32,7 @@ const Navbar = () => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 40,
+    top: 10,
     left: 20,
     zIndex: 10,
   },
