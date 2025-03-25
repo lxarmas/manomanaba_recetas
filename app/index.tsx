@@ -4,16 +4,12 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, 
 export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Background Image with Overlay */}
-      <ImageBackground source={require('@/assets/images/woman_cooking.jpg')} style={styles.backgroundImage}>
+
         <View style={styles.overlay}>
           <Text style={styles.title}>ManoManaba Recetas</Text>
           <Text style={styles.subtitle}>Descubre deliciosas recetas para cada ocasión</Text>
-          <TouchableOpacity style={styles.button}>
-            <Link href="/details" style={styles.buttonText}>Buscar Recetas</Link>
-          </TouchableOpacity>
         </View>
-      </ImageBackground>
+
  <Text style={styles.story}>
         Nacido de la fortaleza de mujeres valientes, este espacio ofrece recetas que han ayudado a sanar heridas y aliviar el dolor.
         Son platillos de amor, de resistencia y de un nuevo comienzo.
@@ -31,14 +27,15 @@ export default function HomeScreen() {
   Cuando la noche termina con violencia, la mañana empieza con un plato que no solo cura el cuerpo, sino que también 
   brinda esperanza. Cada receta aquí es un símbolo de sanación y de la posibilidad de un futuro mejor.
 </Text>
-
+  <TouchableOpacity style={styles.button}>
+            <Link href="/details" style={styles.buttonText}>Buscar Recetas</Link>
+          </TouchableOpacity>
 
         <View style={styles.recipeCard}>
-          <Text style={styles.recipeTitle}>Plato Especial</Text>
         </View>
         <View style={styles.recipeCard}>
           <Image source={require('@/assets/images/ceviche.webp')} style={styles.recipeImage} />
-          <Text style={styles.recipeTitle}>Sabor Único</Text>
+
         </View>
       </ScrollView>
  
@@ -79,7 +76,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   button: {
-    marginTop: 20,
+    marginTop:45 ,
     backgroundColor: '#e63946',
     paddingVertical: 12,
     paddingHorizontal: 25,
