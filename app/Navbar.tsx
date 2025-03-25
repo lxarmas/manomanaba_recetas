@@ -1,33 +1,69 @@
-// /app/Navbar.tsx
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
-import { View, Text, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <View style={styles.navbar}>
-      <Link href="/" style={styles.link}>
-        <Text style={styles.text}>caca</Text>
-      </Link>
-      <Link href="/details" style={styles.link}>
-        <Text style={styles.text}>Details</Text>
-      </Link>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.hamburgerButton}>
+        <Ionicons name={menuOpen ? 'close' : 'menu'} size={28} color="#e63946" />
+      </TouchableOpacity>
+      {menuOpen && (
+        <View style={styles.menu}>
+          <Link href="/" asChild>
+            <TouchableOpacity style={styles.link} onPress={() => setMenuOpen(false)}>
+              <Text style={styles.text}>Inicio</Text>
+            </TouchableOpacity>
+          </Link>
+          <Link href="/details" asChild>
+            <TouchableOpacity style={styles.link} onPress={() => setMenuOpen(false)}>
+              <Text style={styles.text}>Recetas</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  navbar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  container: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 10,
+  },
+  hamburgerButton: {
     padding: 10,
-    backgroundColor: '#e63946',
+    backgroundColor: 'transparent',
+  },
+  menu: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    backgroundColor: '#fff',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    width: 150,
   },
   link: {
-    color: '#fff',
+    paddingVertical: 12,
+    alignItems: 'center',
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
+    color: '#e63946',
+    textAlign: 'center',
   },
 });
 
