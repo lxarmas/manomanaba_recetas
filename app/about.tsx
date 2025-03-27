@@ -1,10 +1,12 @@
 import React from 'react';
 import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import { Video } from 'expo-av'; // Necesitas instalar expo-av para videos
+import Navbar from './Navbar';
 
 export default function AboutUs() {
   return (
     <ScrollView style={styles.container}>
+      <Navbar/>
       {/* Título */}
       <Text style={styles.title}>Sobre Nosotros</Text>
 
