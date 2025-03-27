@@ -23,6 +23,21 @@ const Navbar = () => {
               <Text style={styles.text}>Recetas</Text>
             </TouchableOpacity>
           </Link>
+          <Link href="/about" asChild>
+            <TouchableOpacity style={styles.link} onPress={() => setMenuOpen(false)}>
+              <Text style={styles.text}>Nuestra Historia</Text>
+            </TouchableOpacity>
+          </Link>
+          <Link href="/contact" asChild>
+            <TouchableOpacity style={styles.link} onPress={() => setMenuOpen(false)}>
+              <Text style={styles.text}>Contactanos</Text>
+            </TouchableOpacity>
+          </Link>
+          <Link href="/donate" asChild>
+            <TouchableOpacity style={styles.link} onPress={() => setMenuOpen(false)}>
+              <Text style={[styles.text, styles.donateText]}>Dona ahora!</Text>
+            </TouchableOpacity>
+          </Link>
         </View>
       )}
     </View>
@@ -65,6 +80,11 @@ const styles = StyleSheet.create({
     color: '#e63946',
     textAlign: 'center',
   },
+  donateText: {
+    color: '#ff9800', // Makes the "Donate" button stand out
+    fontWeight: 'bold',
+  },
 });
 
 export default Navbar;
+

@@ -40,14 +40,13 @@ const HomeScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Navbar />
-
-      {/* Header Section */}
+      
       <ImageBackground source={require('../assets/images/famm_logo.jpg')} style={styles.backgroundImage} blurRadius={8}>
+      <Text style={styles.title}>Círculo de Mujeres</Text>
         <Animated.Image
           source={require('../assets/images/famm_logo.jpg')}
           style={[styles.smallLogo, { opacity: fadeAnim }]}
         />
-        <Text style={styles.title}>Círculo de Mujeres</Text>
       </ImageBackground>
 
       <Text style={styles.story}>
@@ -57,8 +56,8 @@ const HomeScreen = () => {
 
       {/* Images Section */}
       <View style={styles.imageContainer}>
-        <Image source={require('../assets/images/womanlaughing.jpg')} style={styles.womanImage} />
-        <Image source={require('../assets/images/oldwomanlaughing.jpg')} style={styles.womanImage} />
+        <Image source={require('../assets/images/singlewoman_cooking.jpg')} style={styles.womanImage} />
+        <Image source={require('../assets/images/threewoman_smiling.jpg')} style={styles.womanImage} />
       </View>
 
       <Text style={styles.story}>

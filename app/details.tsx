@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-
+import Navbar from './Navbar';
 const recipes = [
   {
     id: '1',
@@ -50,6 +50,7 @@ export default function DetailsScreen() {
 
   return (
     <View style={styles.container}>
+      <Navbar/>
       <Text style={styles.title}>Select a Recipe</Text>
       {recipes.map((recipe) => (
         <TouchableOpacity
