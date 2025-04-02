@@ -18,7 +18,16 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0.8)).current;
 
+  // Animation values for the collage
+  const anim1 = useRef(new Animated.ValueXY({ x: -150, y: -100 })).current; // Top-left start
+  const anim2 = useRef(new Animated.ValueXY({ x: 150, y: 0 })).current; // Top-right start
+  const anim3 = useRef(new Animated.ValueXY({ x: 0, y: 200 })).current; // Bottom-center start
+  const rotate1 = useRef(new Animated.Value(0)).current;
+  const rotate2 = useRef(new Animated.Value(0)).current;
+  const rotate3 = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
+    // Logo fade animation
     Animated.loop(
       Animated.sequence([
         Animated.timing(fadeAnim, {
@@ -35,14 +44,75 @@ const HomeScreen = () => {
         }),
       ])
     ).start();
-  }, []);
+
+    // Collage animation
+    Animated.stagger(250, [
+      Animated.parallel([
+        Animated.spring(anim1, {
+          toValue: { x: -50, y: -20 }, // Top-left
+          friction: 5,
+          tension: 50,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rotate1, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.spring(anim2, {
+          toValue: { x: 50, y: -10 }, // Top-right
+          friction: 5,
+          tension: 50,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rotate2, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.spring(anim3, {
+          toValue: { x: 0, y: 80 }, // Bottom-center
+          friction: 5,
+          tension: 50,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rotate3, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+  }, [fadeAnim, anim1, anim2, anim3, rotate1, rotate2, rotate3]);
+
+  // Interpolate rotation values
+  const rotateDeg1 = rotate1.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '-10deg'],
+  });
+  const rotateDeg2 = rotate2.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '8deg'],
+  });
+  const rotateDeg3 = rotate3.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '-5deg'],
+  });
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Navbar />
-      
-      <ImageBackground source={require('../assets/images/famm_logo.jpg')} style={styles.backgroundImage} blurRadius={8}>
-      <Text style={styles.title}>Círculo de Mujeres</Text>
+
+      <ImageBackground
+        source={require('../assets/images/famm_logo.jpg')}
+        style={styles.backgroundImage}
+        blurRadius={8}
+      >
+        <Text style={styles.title}>Círculo de Mujeres</Text>
         <Animated.Image
           source={require('../assets/images/famm_logo.jpg')}
           style={[styles.smallLogo, { opacity: fadeAnim }]}
@@ -54,10 +124,47 @@ const HomeScreen = () => {
         Son platillos de amor, de resistencia y de un nuevo comienzo.
       </Text>
 
-      {/* Images Section */}
-      <View style={styles.imageContainer}>
-        <Image source={require('../assets/images/singlewoman_cooking.jpg')} style={styles.womanImage} />
-        <Image source={require('../assets/images/threewoman_smiling.jpg')} style={styles.womanImage} />
+      {/* Collage as Central Piece */}
+      <View style={styles.collageContainer}>
+        <Animated.Image
+          source={require('../assets/images/ceviche.webp')}
+          style={[
+            styles.collageImage,
+            {
+              transform: [
+                { translateX: anim1.x },
+                { translateY: anim1.y },
+                { rotate: rotateDeg1 },
+              ],
+            },
+          ]}
+        />
+        <Animated.Image
+          source={require('../assets/images/threewoman_smiling.jpg')}
+          style={[
+            styles.collageImage,
+            {
+              transform: [
+                { translateX: anim2.x },
+                { translateY: anim2.y },
+                { rotate: rotateDeg2 },
+              ],
+            },
+          ]}
+        />
+        <Animated.Image
+          source={require('../assets/images/bolas_de_verde.webp')}
+          style={[
+            styles.collageImage,
+            {
+              transform: [
+                { translateX: anim3.x },
+                { translateY: anim3.y },
+                { rotate: rotateDeg3 },
+              ],
+            },
+          ]}
+        />
       </View>
 
       <Text style={styles.story}>
@@ -73,9 +180,9 @@ const HomeScreen = () => {
 
       {/* Embedded Instagram Video */}
       <View style={styles.videoContainer}>
-        <WebView 
-          source={{ uri: 'https://www.instagram.com/reel/C7QHJKpILlk/embed/' }} 
-          style={styles.video} 
+        <WebView
+          source={{ uri: 'https://www.instagram.com/reel/C7QHJKpILlk/embed/' }}
+          style={styles.video}
           allowsFullscreenVideo
           javaScriptEnabled
           domStorageEnabled
@@ -84,7 +191,7 @@ const HomeScreen = () => {
 
       {/* Recipe Card */}
       <View style={styles.recipeCard}>
-        <Image source={require('@/assets/images/ceviche.webp')} style={styles.recipeImage} />
+        <Image source={require('../assets/images/ceviche.webp')} style={styles.recipeImage} />
       </View>
     </ScrollView>
   );
@@ -144,17 +251,37 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  collageContainer: {
+    marginVertical: 60,
+    height: 300, // Space for the collage
+    width: '90%', // Match other content width
+    position: 'relative',
     alignItems: 'center',
-    width: '90%',
-    marginVertical: 15,
+    marginBottom:0,
   },
-  womanImage: {
-    width: 150,
-    height: 150,
-    resizeMode: 'cover',
+  collageImage: {
+    width: 160,
+    height: 160,
+    borderRadius: 10,
+    position: 'absolute',
+    borderWidth: 2,
+    borderColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  videoContainer: {
+    width: '90%',
+    height: 300,
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  video: {
+    width: '100%',
+    height: '100%',
   },
   recipeCard: {
     backgroundColor: '#fff',
@@ -171,18 +298,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: 'cover',
-  },
-  videoContainer: {
-    width: '90%',
-    height: 300,
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginTop: 20,
-    alignSelf: 'center',
-  },
-  video: {
-    width: '100%',
-    height: '100%',
   },
 });
 

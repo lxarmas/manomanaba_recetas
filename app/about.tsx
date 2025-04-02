@@ -15,7 +15,7 @@ export default function AboutUs() {
        source={require('../assets/images/woman_working.mp4')} // Reemplaza con tu URL de video
         style={styles.video}
         useNativeControls
-        resizeMode="cover"
+        resizeMode={Video.RESIZE_MODE_COVER}
         isLooping
       />
 
@@ -41,21 +41,7 @@ export default function AboutUs() {
         Nuestro objetivo es facilitar el acceso a recetas detalladas y fáciles de seguir.
       </Text>
 
-      {/* Imagen extra */}
-      <Image
-        source={require('../assets/images/ceviche.webp')} // Otra imagen opcional
-        style={styles.image}
-          />
-          
-             <Video
-       source={require('../assets/images/cooking_woman.mp4')} // Reemplaza con tu URL de video
-        style={styles.video}
-        useNativeControls
-        resizeMode="cover"
-        isLooping
-      />
 
-      {/* Contacto */}
       <Text style={styles.subtitle}>Contáctanos</Text>
       <Text style={styles.text}>
         ¿Tienes preguntas o sugerencias? Escríbenos a: contacto@nuestraapp.com
