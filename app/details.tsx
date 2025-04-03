@@ -41,21 +41,15 @@ export default function DetailsScreen() {
   const [recipes, setRecipes] = useState(initialRecipes);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [newRecipe, setNewRecipe] = useState<{
-    title: string;
-    ingredients: string;
-    preparation: string;
-    image: string | null;
-  }>({
+  const [newRecipe, setNewRecipe] = useState({
     title: '',
     ingredients: '',
     preparation: '',
-    image: null,
+    image: null, // This will store the URI as a string
   });
 
   const toggleForm = () => setShowForm(!showForm);
 
-  // Function to handle image picking
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -74,7 +68,6 @@ export default function DetailsScreen() {
     }
   };
 
-  // Function to handle taking a photo
   const takePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
@@ -101,18 +94,27 @@ export default function DetailsScreen() {
 
     const newId = (recipes.length + 1).toString();
     const ingredientsArray = newRecipe.ingredients.split(',').map((item) => item.trim());
-    
+
+    // Store the image as an object with a `uri` key for dynamic images
     const newRecipeWithFormattedImage = {
-    ...newRecipe,
-    id: newId,
-    ingredients: ingredientsArray,
-    image: newRecipe.image
-  };
+      ...newRecipe,
+      id: newId,
+      ingredients: ingredientsArray,
+      image: { uri: newRecipe.image }, // Wrap the URI in an object
+    };
 
     setRecipes([...recipes, newRecipeWithFormattedImage]);
     setNewRecipe({ title: '', ingredients: '', preparation: '', image: null });
     setShowForm(false);
     Alert.alert('Success', 'Recipe added!');
+  };
+
+  // Helper function to render images correctly
+  const renderImageSource = (image) => {
+    // If the image is a static asset (from require), return it as-is
+    if (typeof image === 'number') return image;
+    // If the image is a dynamic URI, ensure it’s an object with `uri`
+    return image.uri ? image : { uri: image };
   };
 
   return (
@@ -121,7 +123,7 @@ export default function DetailsScreen() {
       {selectedRecipe ? (
         <View>
           <Text style={styles.title}>{selectedRecipe.title}</Text>
-          <Image source={selectedRecipe.image} style={styles.recipeImage} />
+          <Image source={renderImageSource(selectedRecipe.image)} style={styles.recipeImage} />
           <Text style={styles.sectionTitle}>Ingredients:</Text>
           {selectedRecipe.ingredients.map((ingredient, index) => (
             <Text key={index} style={styles.ingredient}>{`• ${ingredient}`}</Text>
@@ -136,8 +138,12 @@ export default function DetailsScreen() {
         <View>
           <Text style={styles.title}>Select a Recipe</Text>
           {recipes.map((recipe) => (
-            <TouchableOpacity key={recipe.id} style={styles.recipeCard} onPress={() => setSelectedRecipe(recipe)}>
-              <Image source={recipe.image} style={styles.recipeImage} />
+            <TouchableOpacity
+              key={recipe.id}
+              style={styles.recipeCard}
+              onPress={() => setSelectedRecipe(recipe)}
+            >
+              <Image source={renderImageSource(recipe.image)} style={styles.recipeImage} />
               <Text style={styles.recipeTitle}>{recipe.title}</Text>
             </TouchableOpacity>
           ))}
@@ -146,16 +152,34 @@ export default function DetailsScreen() {
           </TouchableOpacity>
           {showForm && (
             <View style={styles.formContainer}>
-              <TextInput style={styles.input} placeholder="Recipe Title" value={newRecipe.title} onChangeText={(text) => setNewRecipe({ ...newRecipe, title: text })} />
-              <TextInput style={styles.input} placeholder="Ingredients (comma-separated)" value={newRecipe.ingredients} onChangeText={(text) => setNewRecipe({ ...newRecipe, ingredients: text })} />
-              <TextInput style={[styles.input, styles.textArea]} placeholder="Preparation Steps" value={newRecipe.preparation} onChangeText={(text) => setNewRecipe({ ...newRecipe, preparation: text })} multiline />
+              <TextInput
+                style={styles.input}
+                placeholder="Recipe Title"
+                value={newRecipe.title}
+                onChangeText={(text) => setNewRecipe({ ...newRecipe, title: text })}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Ingredients (comma-separated)"
+                value={newRecipe.ingredients}
+                onChangeText={(text) => setNewRecipe({ ...newRecipe, ingredients: text })}
+              />
+              <TextInput
+                style={[styles.input, styles.textArea]}
+                placeholder="Preparation Steps"
+                value={newRecipe.preparation}
+                onChangeText={(text) => setNewRecipe({ ...newRecipe, preparation: text })}
+                multiline
+              />
               <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
                 <Text style={styles.imageButtonText}>Pick an Image</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.imageButton} onPress={takePhoto}>
                 <Text style={styles.imageButtonText}>Take a Photo</Text>
               </TouchableOpacity>
-              {newRecipe.image && <Image source={{ uri: newRecipe.image}} style={styles.recipeImage} />}
+              {newRecipe.image && (
+                <Image source={{ uri: newRecipe.image }} style={styles.recipeImage} />
+              )}
               <Button title="Submit Recipe" onPress={addRecipe} />
             </View>
           )}
@@ -179,6 +203,9 @@ const styles = StyleSheet.create({
   textArea: { height: 100, textAlignVertical: 'top' },
   imageButton: { backgroundColor: '#007AFF', padding: 10, borderRadius: 5, alignItems: 'center', marginVertical: 5 },
   imageButtonText: { color: '#fff', fontSize: 16 },
-  previewImage: { width: 100, height: 100, borderRadius: 10, alignSelf: 'center' },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', marginTop: 10 },
+  ingredient: { fontSize: 16 },
+  preparation: { fontSize: 16 },
+  goBackButton: { marginTop: 20, alignItems: 'center' },
+  goBackText: { fontSize: 16, color: '#007AFF' },
 });
-
